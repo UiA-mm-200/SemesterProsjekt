@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mini.css/3.0.1/mini-default.min.css">
+    <title>Grupper</title>
+</head>
+
+<body>
+
+    <div class="row" id="gruppeVisning">
+
+    </div>
+
+
+    <script>
+
+        let grupper = {
+            "ChimpanzeeCobra": ["Emily Thu , emilyt18@student.uia.no", "Sara Eggan Djurhuus , saraed18@student.uia.no", "Lene Bekkemellem , lenebe18@student.uia.no"],
+            "RookMule": ["Olivia Vestbøstad Støle, olivis18@uia.no", "Lise Torp, liset18@uia.no", "Synne Slettene, synnes18@uia.no"],
+            "StingrayRaccoon": ["Frida Sandøy Kvale, fridak18@uia.no", "Mohamed Ahmed Abdi, mohaaa18@uia.no", "Steffen Fagervoll Abrahamsen, steffa18@uia.no", "Christina Olsen, chriol18@uia.no"],
+            "ChinchillaNewt": ["Christine Nilsen , chrira17@uia.no", "Espen Raugstad , esper18@uia.no", "André Pettersen , andrep18@uia.no"],
+            "ParrotGaur": ["Olivia Vestbøstad Støle, olivis18@uia.no", "Lise Torp, liset18@uia.no", "Synne Slettene, synnes18@uia.no"],
+            "AnteaterDinosaur": ["Olivia Vestbøstad Støle, olivis18@uia.no", "Lise Torp, liset18@uia.no", "Synne Slettene, synnes18@uia.no"],
+            "MosquitoVulture": ["Olivia Vestbøstad Støle, olivis18@uia.no", "Lise Torp, liset18@uia.no", "Synne Slettene, synnes18@uia.no"],
+            "CamelGoose": ["Olivia Vestbøstad Støle, olivis18@uia.no", "Lise Torp, liset18@uia.no", "Synne Slettene, synnes18@uia.no"],
+            "FoxOctopus": ["John Glenna Bodsberg, johngb18@student.uia.no", "Torstein Bjørndal, Torstb18@student.uia.no", "Oscar Gusterud, Oscarg18@student.uia.no", "Ådne Grana, Aadneg17@uia.no"],
+            "GuanacoIbis": ["Nora Maria Becker, noramb18@uia.no", "Stian Hanssen Lande, stianl17@uia.no", "Cecilia Kristiansen, Cecik18@uia.no"],
+            "HerringBee": ["Jan Thomas Wåge Flatebø jtflat17@uia.no", "Khaled Bozomqita Kjbozo18@uia.no", "Marius Evensen Mariue17@uia.no"],
+            "ZebraMongoose": ["Frida Marie Ording , fmo@hotmail.no", "Filip Szutkowski , filips18@uia.no", "Tor-Even Voreland, torevv17@uia.no "],
+            "PartridgeGoshawk": ["Lars Fredrik Holst,Try larsfh18@uia.no", "Vegar Hølsbø vjhols18@uia.no", "Georgi Ivanov georgi18@uia.no", "Jan,Roar Finseth Jrfins18@uia.no"],
+            "WallabyGoat": ["Lars Olaf Helås, larsoh18@uia.no", "Kristian Stangeland Waldeland, krissw17@uia.no", "Fredrik Auestad, fredra18@uia.no", "Mariel Dæhlin Johnsson, mariej18@uia.no "],
+            "MallardDove": ["Per Ivar Brenden, perib18@uia.no", "Katja Sabrina Ida Müller, ksmull18@uia.no", "Aza Amlieva, Azaa17@uia.no"],
+            "GoldfishDinosaur": ["Martine Alice Forsmo Boquist, martine.a.forsmo@uia.no ", "Anita Ástrós Pétursdóttir, anitap18@uia.no ", "Leonie Mortensvik, leonim17@student.uia.no", "Katinka Tigerstedt, katinr11@student.uia.no"]
+        };
+
+        Object.keys(grupper).forEach(gruppeNavn => {
+
+            let card = document.createElement("div")
+            card.classList.add("card");
+            let members = grupper[gruppeNavn].reduce((acc, cur) => {
+                console.log(cur);
+                acc += "<br/>" + cur.split(",")[0]
+                return acc;
+            }, "");
+
+            card.innerHTML = `<h3>${gruppeNavn}</h3><p>${members}</p>`
+
+            document.getElementById("gruppeVisning").appendChild(card);
+
+        })
+    </script>
+</body>
+
+</html>
