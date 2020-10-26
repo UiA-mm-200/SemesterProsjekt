@@ -5,11 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mini.css/3.0.1/mini-default.min.css">
+    <script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
     <title>Grupper</title>
 </head>
 
 <body>
 
+    <header class="sticky">
+        <a href="#" class="logo">Grupper MM-200 2020</a>
+        <button id="togleDisplay">
+            <ion-icon name="list-outline"></ion-icon>
+        </button>
+    </header>
     <div class="row" id="gruppeVisning">
 
     </div>
@@ -26,30 +33,98 @@
             "MantisClam": ["Nora Maria Becker, noramb18@uia.no", "Stian Hanssen Lande, stianl17@uia.no", "Cecilia Kristiansen, Cecik18@uia.no"],
             "NarwhalDragonfly": ["Jan Thomas Wåge,Flatebø jtflat17@uia.no", "Khaled Bozomqita,Kjbozo18@uia.no", "Marius Evensen, Mariue17@uia.no"],
             "MartenLapwing": ["Frida Marie Ording , fmo@hotmail.no", "Filip Szutkowski , filips18@uia.no", "Tor-Even Voreland, torevv17@uia.no", "Caroline Berg, carob16@uia.no"],
-            "DragonflyHornet": ["Lars Fredrik Holst,Try larsfh18@uia.no", "Vegar Hølsbø vjhols18@uia.no", "Georgi Ivanov georgi18@uia.no", "Jan,Roar Finseth Jrfins18@uia.no"],
+            "DragonflyHornet": ["Lars Fredrik Holst Try, larsfh18@uia.no", "Vegar Hølsbø ,vjhols18@uia.no", "Georgi Ivanov, georgi18@uia.no", "Jan Roar Finseth , Jrfins18@uia.no"],
             "MagpieSeal": ["Lars Olaf Helås, larsoh18@uia.no", "Kristian Stangeland Waldeland, krissw17@uia.no", "Fredrik Auestad, fredra18@uia.no", "Mariel Dæhlin Johnsson, mariej18@uia.no "],
             "OwlTurtle": ["Per Ivar Brenden, perib18@uia.no", "Katja Sabrina Ida Müller, ksmull18@uia.no", "Aza Amlieva, Azaa17@uia.no"],
             "PigeonQuelea": ["Martine Alice Forsmo Boquist, martine.a.forsmo@uia.no ", "Anita Ástrós Pétursdóttir, anitap18@uia.no ", "Leonie Mortensvik, leonim17@student.uia.no", "Katinka Tigerstedt, katinr11@student.uia.no"],
-            "SealButterfly": [" Kjetil Kristiansen ,kjetilkr@uia.no ", "Sebastian Vangsnes, 	sebasv18@uia.no ", " Leander William Ridley ,	leandr18@uia.no ", " Thor-Eivind Nilsen ,	thoren18@uia.no "]
+            "SealButterfly": [" Kjetil Kristiansen ,kjetilkr@uia.no ", "Sebastian Vangsnes, 	sebasv18@uia.no ", " Leander William Ridley ,	leandr18@uia.no ", " Thor-Eivind Nilsen ,	thoren18@uia.no "],
+            "LamaLama": ["Ole Fredrik Smedsrud,olefs17@student.uia.no", "Onyx Kady Kalala Luabeya,onyxl09@student.uia.no", "Even Eide,	??", "Idar-Martin Randby,??"],
+            "ArmadiloCat": [
+                "Dennis Hernando Knudsen, ?",
+                "Eddie Jensen, ?",
+
+
+                "Keremsa Alice Burås Dominguez, ?",
+                "Saswat Po-Ngoen, ?",
+                "Vegar Nygård, ?"
+            ]
         };
 
+        let count = 0;
+        let displayAsCard = true;
+
+        (function () {
+            render();
+
+            document.getElementById("togleDisplay").onclick = e => {
+                displayAsCard = !displayAsCard;
+                render();
+                document.getElementById("togleDisplay").innerHTML = !displayAsCard ? `<ion-icon name="apps-outline"></ion-icon>` : `<ion-icon name="list-outline" ></ion-icon>`
+            }
 
 
-        Object.keys(grupper).forEach(gruppeNavn => {
+        })();
 
-            let card = document.createElement("div")
-            card.classList.add("card");
-            let members = grupper[gruppeNavn].reduce((acc, cur) => {
-                console.log(cur);
-                acc += "<br/>" + cur.split(",")[0]
-                return acc;
-            }, "");
+        function render() {
+            count = 0;
+            document.getElementById("gruppeVisning").innerHTML = ""
+            let tbl = document.createElement("table");
+            if (!displayAsCard) {
+                let head = document.createElement("thead");
+                head.innerHTML = `<tr><th>Gruppe</th><th>Navn</th><th>Prosjekt</th></tr>`
 
-            card.innerHTML = `<h3>${gruppeNavn}</h3><p>${members}</p>`
+                tbl.appendChild(head)
+            }
 
-            document.getElementById("gruppeVisning").appendChild(card);
+            Object.keys(grupper).forEach(gruppeNavn => {
 
-        })
+                if (displayAsCard) {
+                    let card = document.createElement("div")
+                    card.classList.add("card");
+                    let members = grupper[gruppeNavn].reduce((acc, cur) => {
+                        console.log(cur);
+                        acc += "<br/>" + cur.split(",")[0]
+                        count++;
+                        return acc;
+                    }, "");
+
+                    card.innerHTML = `<h3>${gruppeNavn}</h3><p>${members}</p>`
+
+                    document.getElementById("gruppeVisning").appendChild(card);
+                } else {
+                    let members = [];
+
+                    grupper[gruppeNavn].forEach(person => {
+                        let row = document.createElement("tr");
+                        let cell = document.createElement("td")
+                        cell.innerHTML = gruppeNavn;
+                        row.appendChild(cell)
+                        cell.setAttribute("data-label", "Gruppe")
+                        cell = document.createElement("td")
+                        cell.innerHTML = person.split(",")[0]
+                        cell.setAttribute("data-label", "Navn")
+                        row.appendChild(cell)
+                        cell = document.createElement("td")
+                        cell.innerHTML = "?"
+                        cell.setAttribute("data-label", "Prosjekt")
+                        row.appendChild(cell)
+                        tbl.appendChild(row);
+                        count++;
+                    })
+                }
+
+            })
+
+            if (!displayAsCard) {
+                tbl.classList.add("hoverable")
+                document.getElementById("gruppeVisning").appendChild(tbl);
+            }
+
+            let total = document.createElement("p");
+            total.innerHTML = `Antall studenter i grupper ${count} av 58`;
+            document.getElementById("gruppeVisning").appendChild(total)
+        }
+
     </script>
 </body>
 
