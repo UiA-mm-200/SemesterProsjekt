@@ -24,37 +24,21 @@
 
     <script>
 
-        let grupper = {
-            "WoodcockCapybara": ["Emily Thu , emilyt18@student.uia.no", "Sara Eggan Djurhuus , saraed18@student.uia.no", "Lene Bekkemellem , lenebe18@student.uia.no"],
-            "LemurGerbil": ["Olivia Vestbøstad Støle, olivis18@uia.no", "Lise Torp, liset18@uia.no", "Synne Slettene, synnes18@uia.no", "Thina-Elise Reppen,thinar18@uia.no "],
-            "KingfisherEmu": ["Frida Sandøy Kvale, fridak18@uia.no", "Mohamed Ahmed Abdi, mohaaa18@uia.no", "Steffen Fagervoll Abrahamsen, steffa18@uia.no", "Christina Olsen, chriol18@uia.no"],
-            "MantisEel": ["Christine Nilsen , chrira17@uia.no", "Espen Raugstad , esper18@uia.no", "André Pettersen , andrep18@uia.no"],
-            "FrogCockroach": ["John Glenna Bodsberg, johngb18@student.uia.no", "Torstein Bjørndal, Torstb18@student.uia.no", "Oscar Gusterud, Oscarg18@student.uia.no", "Ådne Grana, Aadneg17@uia.no"],
-            "MantisClam": ["Nora Maria Becker, noramb18@uia.no", "Stian Hanssen Lande, stianl17@uia.no", "Cecilia Kristiansen, Cecik18@uia.no"],
-            "NarwhalDragonfly": ["Jan Thomas Wåge,Flatebø jtflat17@uia.no", "Khaled Bozomqita,Kjbozo18@uia.no", "Marius Evensen, Mariue17@uia.no"],
-            "MartenLapwing": ["Frida Marie Ording , fmo@hotmail.no", "Filip Szutkowski , filips18@uia.no", "Tor-Even Voreland, torevv17@uia.no", "Caroline Berg, carob16@uia.no"],
-            "DragonflyHornet": ["Lars Fredrik Holst Try, larsfh18@uia.no", "Vegar Hølsbø ,vjhols18@uia.no", "Georgi Ivanov, georgi18@uia.no", "Jan Roar Finseth , Jrfins18@uia.no"],
-            "MagpieSeal": ["Lars Olaf Helås, larsoh18@uia.no", "Kristian Stangeland Waldeland, krissw17@uia.no", "Fredrik Auestad, fredra18@uia.no", "Mariel Dæhlin Johnsson, mariej18@uia.no "],
-            "OwlTurtle": ["Per Ivar Brenden, perib18@uia.no", "Katja Sabrina Ida Müller, ksmull18@uia.no", "Aza Amlieva, Azaa17@uia.no"],
-            "PigeonQuelea": ["Martine Alice Forsmo Boquist, martine.a.forsmo@uia.no ", "Anita Ástrós Pétursdóttir, anitap18@uia.no ", "Leonie Mortensvik, leonim17@student.uia.no", "Katinka Tigerstedt, katinr11@student.uia.no"],
-            "SealButterfly": [" Kjetil Kristiansen ,kjetilkr@uia.no ", "Sebastian Vangsnes, 	sebasv18@uia.no ", " Leander William Ridley ,	leandr18@uia.no ", " Thor-Eivind Nilsen ,	thoren18@uia.no "],
-            "LamaLama": ["Ole Fredrik Smedsrud,olefs17@student.uia.no", "Onyx Kady Kalala Luabeya,onyxl09@student.uia.no", "Even Eide,	??", "Idar-Martin Randby,??"],
-            "ArmadiloCat": ["Dennis Hernando Knudsen, ?", "Eddie Jensen, ?", "Keremsa Alice Burås Dominguez, ?"],
-            "MeerkatPanda": ["Saswat Po-Ngoen, ?", "Vegar Nygård, ?", "Alexander Egeland Lervik,?"]
-        }
-
+        let grupper = null;
         let count = 0;
         let displayAsCard = true;
 
         (function () {
-            render();
+            fetch("grupper.json").then(resp => resp.json()).then(json => {
+                grupper = json;
+                render();
+            })
 
             document.getElementById("togleDisplay").onclick = e => {
                 displayAsCard = !displayAsCard;
                 render();
                 document.getElementById("togleDisplay").innerHTML = !displayAsCard ? `<ion-icon name="apps-outline"></ion-icon>` : `<ion-icon name="list-outline" ></ion-icon>`
             }
-
 
         })();
 
@@ -74,20 +58,22 @@
                 if (displayAsCard) {
                     let card = document.createElement("div")
                     card.classList.add("card");
-                    let members = grupper[gruppeNavn].reduce((acc, cur) => {
+                    let members = grupper[gruppeNavn].members.reduce((acc, cur) => {
                         console.log(cur);
                         acc += "<br/>" + cur.split(",")[0]
                         count++;
                         return acc;
                     }, "");
 
-                    card.innerHTML = `<h3>${gruppeNavn}</h3><p>${members}</p>`
+                    card.innerHTML = `<h3>${gruppeNavn} <small>${projectDisplayName(grupper[gruppeNavn].project).name}</small></h3><p>${members}</p>`
 
                     document.getElementById("gruppeVisning").appendChild(card);
                 } else {
                     let members = [];
 
-                    grupper[gruppeNavn].forEach(person => {
+                    let gruppe = grupper[gruppeNavn];
+
+                    gruppe.members.forEach(person => {
                         let row = document.createElement("tr");
                         let cell = document.createElement("td")
                         cell.innerHTML = gruppeNavn;
@@ -98,7 +84,7 @@
                         cell.setAttribute("data-label", "Navn")
                         row.appendChild(cell)
                         cell = document.createElement("td")
-                        cell.innerHTML = "?"
+                        cell.innerHTML = projectDisplayName(gruppe.project).name;
                         cell.setAttribute("data-label", "Prosjekt")
                         row.appendChild(cell)
                         tbl.appendChild(row);
@@ -107,6 +93,11 @@
                 }
 
             })
+
+            function projectDisplayName(project) {
+                let projects = [{ name: "Task planner" }, { name: "Presentation tool" }, { name: "Game" }]
+                return projects[project - 1];
+            }
 
             if (!displayAsCard) {
                 tbl.classList.add("hoverable")
